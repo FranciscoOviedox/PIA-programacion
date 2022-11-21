@@ -1,0 +1,45 @@
+do{
+        printf("\t\tAlojamientos FCFM\nUsuario: ");
+        gets(user);
+        fflush(stdin);
+        printf("Contrase%ca: ",164);
+        gets(password);
+        fflush(stdin);
+        tusers users;
+        fread(&users,sizeof(tusers),1,arch);
+        while(!feof(arch)){
+            if (strcmp(user,users.user)==0&&strcmp(password,users.password)==0){
+                x=1;
+                switch(users.type){
+                case 1:return 1;
+                    break;
+                case 2:return 2;
+                    break;
+                case 0: system("CLS");
+                    printf("Usuario bloqueado, favor de contactar al administrador del sistema\n");
+                    op=0;
+                    break;
+                }
+                break;
+            }
+            fread(&users,sizeof(tusers),1,arch);
+        }
+        if (x==1){
+            op=4;
+        }else if (op==2){
+            system("CLS");
+            printf("Usuario bloqueado, favor de contactar al administrador del sistema\n\n");
+            fread(&users, sizeof(tusers),1,arch);
+            users.type=0;
+            int pos=ftell(arch)-sizeof(tusers);
+            fseek(arch,pos,SEEK_SET);
+            fwrite(&users, sizeof(tusers), 1, arch);
+            break;
+            op=0;
+        }else{
+            system("CLS");
+            printf("Nombre de usuario o contrase%ca invalido, intente de nuevo!!!\n\n",164);
+            op++;
+        }
+    }while(op!=3);
+    fclose(arch);
